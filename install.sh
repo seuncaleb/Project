@@ -23,7 +23,9 @@ sudo tee /etc/apt/sources.list.d/hashicorp.list
 sudo apt update && sudo apt install terraform -y
 
 # install kubectl
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl"
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 kubectl version --client
 
@@ -64,7 +66,11 @@ sudo systemctl enable jenkins
 
 sudo systemctl start jenkins
 
+#give Docker and Jenkins users sudo access 
 sudo su - 
 usermod -aG docker jenkins
 usermod -aG docker ubuntu
 systemctl restart docker
+
+#Install Python 
+apt-get install -yq jq python-pip curl unzip build-essential python-dev

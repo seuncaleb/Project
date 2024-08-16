@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                // Clone the Git repository from the specified URL and branch
+                git url: 'https://github.com/seuncaleb/microservices-demo.git', branch: 'master'
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                dir('deploy/kubernetes') {
+                    // Execute commands in the deploy/kubernetes folder
+                    sh '''
+                        # Create the Kubernetes namespace
+                        echo "Creating Kubernetes namespace 'sock-shop':"
+                        kubectl create namespace sock-shop
+
+                        # Apply the Kubernetes configuration file
+                        echo "Applying complete-demo.yaml:"
+                        kubectl apply -f complete-demo.yaml
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Actions that should always run, such as cleanup or notifications
+            echo 'Pipeline finished.'
+        }
+    }
+}

@@ -53,3 +53,26 @@ Terraform will prompt for confirmation before proceeding. Type \`yes\` to contin
 ### 5. Access the Application
 
 Once the deployment is completed go to your ec2 instance and ensure to restart the instance to ensure all updates from the script are properly deployed
+
+run the following command 
+\`\`\`bash
+export KOPS_STATE_STORE=""{s3bucketname}""
+export NAME= "{name}"
+  export CONTROL_PLANE_SIZE="c5.large"
+  export NODE_SIZE="m5.large"
+  export ZONES="us-east-1a,us-east-1b,us-east-1c"
+  kops create cluster k8s-cluster.seuncaleb.co.uk \
+  --node-count 3 \
+  --zones $ZONES \
+  --node-size $NODE_SIZE \
+  --control-plane-size $CONTROL_PLANE_SIZE \
+  --control-plane-zones $ZONES \
+  --networking cilium \
+  --topology private \
+  --bastion="true" \
+  --yes
+\`\`\`
+
+
+### 6. set up jenkins 
+In this repo there is a jenkins file in the folder ./sock-app-script that serves as the deployment script for jenkins. 

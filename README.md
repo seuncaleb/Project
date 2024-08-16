@@ -2,53 +2,46 @@
 Final Project 
 # Create a markdown file with the deployment instructions
 
-# Sock Shop Application Deployment
+# Deploying Sock Shop App
 
-This document provides instructions for deploying the Sock Shop application using Terraform.
+For this deployment, we'll be using the Kops option to deploy the Sock Shop app on Kubernetes.
 
 ## Prerequisites
 
-Before you begin, ensure that you have the following:
+- Terraform
+- AWS Account
+- AWS CLI
+- Registered and Running DNS
 
-- **Terraform**: Make sure Terraform is installed on your machine. You can download Terraform from the official [Terraform website](https://www.terraform.io/downloads.html).
+## Deployment Steps
 
-## Deployment Instructions
+1. **Clone the Repository**
+   - Clone the repository containing the necessary files for the Sock Shop deployment to your local system.
 
-### 1. Clone the Repository
+2. **Navigate to the Terraform Folder**
+   - Change directory into the `terraform` folder within the cloned repository:
+     ```bash
+     cd terraform
+     ```
 
-Clone the repository containing the Sock Shop application:
+3. **Create a `.tfvar` File**
+   - Create a `.tfvar` file to store your variables. This file will contain specific values such as your AWS credentials, region, and other necessary variables.
 
-\`\`\`bash
-git clone https://github.com/example/sock-shop.git
-cd sock-shop
-\`\`\`
+4. **Run Terraform Commands**
+   - Initialize the Terraform workspace by running:
+     ```bash
+     terraform init
+     ```
+   - Review the plan to ensure everything is configured correctly:
+     ```bash
+     terraform plan
+     ```
+   - Apply the Terraform configuration to create the necessary infrastructure. Use the `-auto-approve` flag to skip manual approval:
+     ```bash
+     terraform apply -auto-approve
+     ```
 
-### 2. Initialize Terraform
-
-Navigate to the Terraform directory and initialize Terraform. This step downloads the necessary provider plugins and prepares your environment:
-
-\`\`\`bash
-cd terraform
-terraform init
-\`\`\`
-
-### 3. Review the Terraform Plan
-
-It's good practice to review the changes Terraform will make to your infrastructure. Run the following command to generate and review the execution plan:
-
-\`\`\`bash
-terraform plan
-\`\`\`
-
-### 4. Apply the Terraform Configuration
-
-After reviewing the plan and ensuring everything is correct, apply the configuration to deploy the infrastructure:
-
-\`\`\`bash
-terraform apply -auto-approve
-\`\`\`
-
-Terraform will prompt for confirmation before proceeding. Type \`yes\` to continue.
+Following these steps will set up the infrastructure needed to deploy the Sock Shop app using Kops on Kubernetes.
 
 ### 5. Access the Application
 
@@ -61,7 +54,7 @@ export NAME= "{name}"
   export CONTROL_PLANE_SIZE="c5.large"
   export NODE_SIZE="m5.large"
   export ZONES="us-east-1a,us-east-1b,us-east-1c"
-  kops create cluster k8s-cluster.seuncaleb.co.uk \
+  kops create cluster {clustername}.{domainname} \
   --node-count 3 \
   --zones $ZONES \
   --node-size $NODE_SIZE \

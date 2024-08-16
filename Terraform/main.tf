@@ -6,9 +6,16 @@ resource "aws_instance" "project-server" {
   associate_public_ip_address   = true
   key_name          = "${var.key_pair_name}"
   subnet_id         = aws_subnet.project-subnet-1.id
+  iam_instance_profile = "${aws_iam_instance_profile.test_profile.name}"
   user_data = "${file("install.sh")}"
 
   tags = {
     Name = "project-server"
   }
 }
+
+resource "aws_iam_instance_profile" "test_profile" {
+  name = "test_profile"
+  role = "${aws_iam_role.my_role.name}"
+}
+

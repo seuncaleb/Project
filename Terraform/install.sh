@@ -66,11 +66,34 @@ sudo systemctl enable jenkins
 
 sudo systemctl start jenkins
 
+#Download docker 
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+
 #give Docker and Jenkins users sudo access 
 sudo su - 
 usermod -aG docker jenkins
 usermod -aG docker ubuntu
 systemctl restart docker
 
-#Install Python 
-apt-get install -yq jq python-pip curl unzip build-essential python-dev
+
+#Install Kops
+curl -Lo kops https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+chmod +x kops
+sudo mv kops /usr/local/bin/kops
+
+#generate ssh for kops 
+sudo ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q

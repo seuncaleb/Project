@@ -1,6 +1,6 @@
 //CREATING MY S3 BUCKET
 resource "aws_s3_bucket" "caleb-project-terraform-bucket" {
-  bucket = "caleb-project-terraform-bucket"
+  bucket = "kops-seuncaleb"
 
   lifecycle {
     prevent_destroy = false
